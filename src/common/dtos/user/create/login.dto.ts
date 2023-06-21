@@ -14,7 +14,7 @@ export class LoginDto {
   @IsString({ message: 'Phone must be a string' })
   phone: string;
 
-  @ApiProperty()
+  @ApiProperty({ default: 'bh123@gmail.com' })
   @IsOptional()
   @IsString({ message: 'Email must be a string' })
   email: string;

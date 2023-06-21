@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PurchaseDto } from 'src/common/dtos/purchase/purchase.dto';
+import { PurchaseDto, PurchaseSearchDto } from 'src/common/dtos/purchase/purchase.dto';
 import { PurchaseEntity } from 'src/common/entities/purchase.entity';
 import { ActiveStatus } from 'src/common/enums/active.enum';
 import { Repository } from 'typeorm';
@@ -34,12 +34,17 @@ export class PurchaseService {
     limit: number,
     sort: 'DESC' | 'ASC',
     order: string,
+    purchaseSearchDto:PurchaseSearchDto
   ): Promise<[PurchaseDto[], number]> {
     try {
       const query = await this.purchaseRepository.createQueryBuilder('purchase');
       query.where({ isActive: ActiveStatus.ACTIVE });
 
-     
+      if (purchaseSearchDto.name && purchaseSearchDto.name.length > 0) {
+        query.andWhere('lower(purchase.name) like :name', {
+          name: `%${purchaseSearchDto.name.toLowerCase()}%`,
+        });
+      }
       sort = sort !== undefined ? (sort === 'ASC' ? 'ASC' : 'DESC') : 'DESC';
 
       const orderFields = [

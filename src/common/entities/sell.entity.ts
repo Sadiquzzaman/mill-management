@@ -1,10 +1,10 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { StringToNumericTransformer } from '../transformers/string-to-numeric.transformer';
 import { CustomBaseEntity } from './custom-base.entity';
-import { SellEntity } from './sell.entity';
+import { PurchaseEntity } from './purchase.entity';
 
-@Entity({ name: 'PurchaseEntity' })
-export class PurchaseEntity extends CustomBaseEntity {
+@Entity({ name: 'SellEntity' })
+export class SellEntity extends CustomBaseEntity {
   @Column({ type: 'varchar', name: 'name', length: 65 })
   name: string;
 
@@ -30,12 +30,12 @@ export class PurchaseEntity extends CustomBaseEntity {
 
   @Column({
     type: 'timestamp',
-    name: 'purchase_date',
+    name: 'sell_date',
     nullable: true,
   })
-  purchaseDate: Date | null;
+  sellDate: Date | null;
 
-  @OneToMany(() => SellEntity, (sellEntity) => sellEntity.purchase)
+  @ManyToOne(() => PurchaseEntity, (purchaseEntity) => purchaseEntity.sells)
   @JoinColumn({ name: 'purchase_id' })
-  sells: SellEntity[];
+  purchase: PurchaseEntity;
 }

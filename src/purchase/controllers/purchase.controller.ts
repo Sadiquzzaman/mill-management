@@ -7,7 +7,8 @@ import {
   HttpStatus,
   Param,
   Post,
-  Put
+  Put,
+  Query,
 } from '@nestjs/common';
 import {
   ApiBody,
@@ -15,11 +16,12 @@ import {
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { PurchaseDto } from 'src/common/dtos/purchase/purchase.dto';
-import { SUPERADMIN_ADMIN } from 'src/common/enums/role-name.enum';
 import {
-  AuthWithRoles
-} from '../../common/decorators/auth-guard.decorator';
+  PurchaseDto,
+  PurchaseSearchDto,
+} from 'src/common/dtos/purchase/purchase.dto';
+import { SUPERADMIN_ADMIN } from 'src/common/enums/role-name.enum';
+import { AuthWithRoles } from '../../common/decorators/auth-guard.decorator';
 import { PaginationDecorator } from '../../common/decorators/pagination.decorator';
 import { PaginationDTO } from '../../common/dtos/pagination/pagination.dto';
 import { ResponseDto } from '../../common/dtos/reponse/response.dto';
@@ -59,12 +61,14 @@ export class PurchaseController {
   @Get('pagination')
   pagination(
     @PaginationDecorator() pagination: PaginationDTO,
+    @Query() purchaseSearchDto: PurchaseSearchDto,
   ): Promise<ResponseDto> {
     const purchases = this.purchaseService.pagination(
       pagination.page,
       pagination.limit,
       pagination.sort as 'DESC' | 'ASC',
       pagination.order,
+      purchaseSearchDto,
     );
     return this.responseService.toPaginationResponse(
       HttpStatus.OK,
@@ -100,8 +104,6 @@ export class PurchaseController {
       purchase,
     );
   }
-
-  
 
   // @UseGuards(new EditorGuard())
   @ApiOkResponse({
