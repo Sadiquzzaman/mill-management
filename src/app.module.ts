@@ -10,6 +10,7 @@ import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { AuthMiddleware } from './common/middleware/auth.middleware';
 import { UserModule } from './user/user.module';
 import { PurchaseModule } from './purchase/purchase.module';
+import { SellModule } from './sell/sell.module';
 
 const ENV = process.env['NODE_ENV'];
 const envFilePath = [`env/${!ENV ? `.env` : `.env.${ENV}`}`];
@@ -38,7 +39,8 @@ const envFilePath = [`env/${!ENV ? `.env` : `.env.${ENV}`}`];
     }),
     AuthModule,
     UserModule,
-    PurchaseModule
+    PurchaseModule,
+    SellModule,
   ],
   providers: [
     {
