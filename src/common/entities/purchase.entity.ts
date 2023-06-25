@@ -2,6 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { StringToNumericTransformer } from '../transformers/string-to-numeric.transformer';
 import { CustomBaseEntity } from './custom-base.entity';
 import { SellEntity } from './sell.entity';
+import { ManufactureEntity } from './manufacture.entity';
 
 @Entity({ name: 'PurchaseEntity' })
 export class PurchaseEntity extends CustomBaseEntity {
@@ -38,4 +39,11 @@ export class PurchaseEntity extends CustomBaseEntity {
   @OneToMany(() => SellEntity, (sellEntity) => sellEntity.purchase)
   @JoinColumn({ name: 'purchase_id' })
   sells: SellEntity[];
+
+  @OneToMany(
+    () => ManufactureEntity,
+    (manufactureEntity) => manufactureEntity.purchase,
+  )
+  @JoinColumn({ name: 'purchase_id' })
+  manufactures: ManufactureEntity[];
 }
