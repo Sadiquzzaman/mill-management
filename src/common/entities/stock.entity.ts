@@ -1,8 +1,6 @@
-import { RoleNameEnum } from '../enums/role-name.enum';
-import { Column, Entity, Index } from 'typeorm';
-import { CustomBaseEntity } from './custom-base.entity';
-import { Exclude } from 'class-transformer';
+import { Column, Entity } from 'typeorm';
 import { StringToNumericTransformer } from '../transformers/string-to-numeric.transformer';
+import { CustomBaseEntity } from './custom-base.entity';
 
 @Entity({ name: 'StockEntity' })
 export class StockEntity extends CustomBaseEntity {
