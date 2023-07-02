@@ -14,6 +14,7 @@ import { SellModule } from './sell/sell.module';
 import { ManufactureModule } from './manufacture/manufacture.module';
 import { CustomerModule } from './customer/customer.module';
 import { LedgerModule } from './ledger/ledger.module';
+import { BuyerModule } from './buyer/buyer.module';
 
 const ENV = process.env['NODE_ENV'];
 const envFilePath = [`env/${!ENV ? `.env` : `.env.${ENV}`}`];
@@ -47,6 +48,7 @@ const envFilePath = [`env/${!ENV ? `.env` : `.env.${ENV}`}`];
     ManufactureModule,
     CustomerModule,
     LedgerModule,
+    BuyerModule,
   ],
   providers: [
     {
@@ -64,9 +66,7 @@ const envFilePath = [`env/${!ENV ? `.env` : `.env.${ENV}`}`];
   ],
 })
 export class AppModule {
-  constructor() {
-    console.log(__dirname);
-  }
+  constructor() {}
 
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(AuthMiddleware).forRoutes('*');
