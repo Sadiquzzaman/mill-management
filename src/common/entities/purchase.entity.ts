@@ -1,8 +1,17 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+} from 'typeorm';
 import { StringToNumericTransformer } from '../transformers/string-to-numeric.transformer';
 import { CustomBaseEntity } from './custom-base.entity';
 import { SellEntity } from './sell.entity';
 import { ManufactureEntity } from './manufacture.entity';
+import { TransactionType } from '../enums/transactionType.enum';
+import { SellerEntity } from './seller.entity';
 
 @Entity({ name: 'PurchaseEntity' })
 export class PurchaseEntity extends CustomBaseEntity {
@@ -35,6 +44,18 @@ export class PurchaseEntity extends CustomBaseEntity {
     nullable: true,
   })
   purchaseDate: Date | null;
+
+  @Column({
+    type: 'enum',
+    enum: TransactionType,
+    name: 'transactionType',
+    default: `${TransactionType.Cash}`,
+  })
+  transactionType: TransactionType;
+
+  @OneToOne(() => SellerEntity, (sellerEntity) => sellerEntity.purchase)
+  @JoinColumn({ name: 'seller_id' })
+  customer: SellerEntity;
 
   @OneToMany(() => SellEntity, (sellEntity) => sellEntity.purchase)
   @JoinColumn({ name: 'purchase_id' })

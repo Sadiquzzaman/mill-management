@@ -16,7 +16,6 @@ import {
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { BuyerDto, BuyerSearchDto } from 'src/common/dtos/buyer/buyer.dto';
 import { SUPERADMIN_ADMIN } from 'src/common/enums/role-name.enum';
 import { AuthWithRoles } from '../../common/decorators/auth-guard.decorator';
 import { PaginationDecorator } from '../../common/decorators/pagination.decorator';
@@ -26,13 +25,14 @@ import { DtoValidationPipe } from '../../common/pipes/dto-validation.pipe';
 import { UuidValidationPipe } from '../../common/pipes/uuid-validation.pipe';
 import { RequestService } from '../../common/services/request.service';
 import { ResponseService } from '../../common/services/response.service';
-import { BuyerService } from '../services/buyer.service';
+import { SellerDto, SellerSearchDto } from 'src/common/dtos/seller/seller.dto';
+import { SellerService } from '../services/seller.service';
 
-@ApiTags('buyers')
-@Controller('buyer')
-export class BuyerController {
+@ApiTags('sellers')
+@Controller('seller')
+export class SellerController {
   constructor(
-    private buyerService: BuyerService,
+    private sellerService: SellerService,
     private readonly responseService: ResponseService,
     private readonly requestService: RequestService,
   ) {}
@@ -45,43 +45,43 @@ export class BuyerController {
   @Get()
   // @AuthWithRoles([...SUPERADMIN_ADMIN])
   findAll(): Promise<ResponseDto> {
-    const buyers = this.buyerService.findAll();
-    return this.responseService.toDtosResponse(HttpStatus.OK, null, buyers);
+    const sellers = this.sellerService.findAll();
+    return this.responseService.toDtosResponse(HttpStatus.OK, null, sellers);
   }
 
   @ApiOkResponse({
     status: HttpStatus.OK,
-    description: 'Buyer list in pagination',
+    description: 'Seller list in pagination',
   })
   @HttpCode(HttpStatus.OK)
   @AuthWithRoles([...SUPERADMIN_ADMIN])
   @Get('pagination')
   pagination(
     @PaginationDecorator() pagination: PaginationDTO,
-    @Query() buyerSearchDto: BuyerSearchDto,
+    @Query() sellerSearchDto: SellerSearchDto,
   ): Promise<ResponseDto> {
-    const buyers = this.buyerService.pagination(
+    const sellers = this.sellerService.pagination(
       pagination.page,
       pagination.limit,
       pagination.sort as 'DESC' | 'ASC',
       pagination.order,
-      buyerSearchDto,
+      sellerSearchDto,
     );
     return this.responseService.toPaginationResponse(
       HttpStatus.OK,
-      'Buyer list in pagination',
+      'Seller list in pagination',
       pagination.page,
       pagination.limit,
-      buyers,
+      sellers,
     );
   }
 
   // @UseGuards(new EditorGuard())
   @ApiCreatedResponse({
-    description: 'A new buyer is created',
+    description: 'A new seller is created',
   })
   @AuthWithRoles([...SUPERADMIN_ADMIN])
-  @ApiBody({ type: BuyerDto })
+  @ApiBody({ type: SellerDto })
   @HttpCode(HttpStatus.CREATED)
   @Post()
   create(
@@ -91,22 +91,22 @@ export class BuyerController {
         forbidNonWhitelisted: true,
       }),
     )
-    buyerDto: BuyerDto,
+    sellerDto: SellerDto,
   ): Promise<ResponseDto> {
-    const modifiedDto = this.requestService.forCreate(buyerDto);
-    const buyer = this.buyerService.create(modifiedDto);
+    const modifiedDto = this.requestService.forCreate(sellerDto);
+    const seller = this.sellerService.create(modifiedDto);
     return this.responseService.toDtoResponse(
       HttpStatus.CREATED,
-      'A new buyer is created',
-      buyer,
+      'A new seller is created',
+      seller,
     );
   }
 
   // @UseGuards(new EditorGuard())
   @ApiOkResponse({
-    description: 'Buyer has been updated',
+    description: 'Seller has been updated',
   })
-  @ApiBody({ type: BuyerDto })
+  @ApiBody({ type: SellerDto })
   @HttpCode(HttpStatus.OK)
   @Put(':id')
   @AuthWithRoles([...SUPERADMIN_ADMIN])
@@ -119,21 +119,21 @@ export class BuyerController {
         forbidNonWhitelisted: true,
       }),
     )
-    buyerDto: BuyerDto,
+    sellerDto: SellerDto,
   ): Promise<ResponseDto> {
-    const modifiedDto = this.requestService.forUpdate(buyerDto);
-    const buyer = this.buyerService.update(id, modifiedDto);
+    const modifiedDto = this.requestService.forUpdate(sellerDto);
+    const seller = this.sellerService.update(id, modifiedDto);
     return this.responseService.toDtoResponse(
       HttpStatus.OK,
-      'Buyer has been updated',
-      buyer,
+      'Seller has been updated',
+      seller,
     );
   }
 
   // @UseGuards(new EditorGuard())
   @ApiOkResponse({
     status: HttpStatus.OK,
-    description: 'Buyer successfully deleted!',
+    description: 'Seller successfully deleted!',
   })
   @HttpCode(HttpStatus.OK)
   @AuthWithRoles([...SUPERADMIN_ADMIN])
@@ -141,10 +141,10 @@ export class BuyerController {
   remove(
     @Param('id', new UuidValidationPipe()) id: string,
   ): Promise<ResponseDto> {
-    const deleted = this.buyerService.remove(id);
+    const deleted = this.sellerService.remove(id);
     return this.responseService.toResponse(
       HttpStatus.OK,
-      'Buyer successfully deleted!',
+      'Seller successfully deleted!',
       deleted,
     );
   }
@@ -159,7 +159,7 @@ export class BuyerController {
   findById(
     @Param('id', new UuidValidationPipe()) id: string,
   ): Promise<ResponseDto> {
-    const buyer = this.buyerService.findById(id);
-    return this.responseService.toDtoResponse(HttpStatus.OK, null, buyer);
+    const seller = this.sellerService.findById(id);
+    return this.responseService.toDtoResponse(HttpStatus.OK, null, seller);
   }
 }

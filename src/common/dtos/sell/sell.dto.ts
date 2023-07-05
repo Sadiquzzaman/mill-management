@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsDateString,
+  IsEnum,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -11,6 +12,7 @@ import { BaseDto } from '../core/base.dto';
 import { Type } from 'class-transformer';
 import { PurchaseDto } from '../purchase/purchase.dto';
 import { ApiQueryPaginationBaseDTO } from '../pagination/api-query-pagination-base.dto';
+import { TransactionType } from 'src/common/enums/transactionType.enum';
 
 export class SellDto extends BaseDto {
   @ApiProperty({ default: 'Wheat' })
@@ -39,6 +41,12 @@ export class SellDto extends BaseDto {
   @IsNotEmpty()
   @IsDateString({ strict: true }, { message: 'Must be a valid date' })
   sellDate: Date | null;
+
+  @ApiProperty({ default: TransactionType.Cash })
+  @IsOptional()
+  @IsString({ message: 'Must be a string!' })
+  @IsEnum(TransactionType)
+  transactionType: TransactionType;
 
   @Type(() => PurchaseDto)
   purchase: PurchaseDto;

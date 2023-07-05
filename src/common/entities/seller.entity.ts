@@ -1,8 +1,9 @@
-import { Column, Entity, Index } from 'typeorm';
+import { Column, Entity, Index, OneToOne } from 'typeorm';
 import { CustomBaseEntity } from './custom-base.entity';
+import { PurchaseEntity } from './purchase.entity';
 
-@Entity({ name: 'BuyerEntity' })
-export class BuyerEntity extends CustomBaseEntity {
+@Entity({ name: 'SellerEntity' })
+export class SellerEntity extends CustomBaseEntity {
   @Column({ type: 'varchar', name: 'name', length: 65 })
   name: string;
 
@@ -13,4 +14,7 @@ export class BuyerEntity extends CustomBaseEntity {
   @Column({ type: 'varchar', name: 'companyName', length: 100, nullable: true })
   @Index({ unique: true })
   companyName: string;
+
+  @OneToOne(() => PurchaseEntity, (purchaseEntity) => purchaseEntity.customer)
+  purchase: PurchaseEntity;
 }

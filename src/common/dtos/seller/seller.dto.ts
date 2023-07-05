@@ -3,7 +3,7 @@ import { IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator';
 import { BaseDto } from '../core/base.dto';
 import { ApiQueryPaginationBaseDTO } from '../pagination/api-query-pagination-base.dto';
 
-export class BuyerDto extends BaseDto {
+export class SellerDto extends BaseDto {
   @ApiProperty({ default: 'Shovon' })
   @IsNotEmpty({ message: 'Must be non empty' })
   @IsString({ message: 'Must be a string' })
@@ -23,7 +23,7 @@ export class BuyerDto extends BaseDto {
   companyName: string;
 }
 
-export class BuyerSearchDto extends ApiQueryPaginationBaseDTO {
+export class SellerSearchDto extends ApiQueryPaginationBaseDTO {
   @ApiProperty({
     default: 'Shovon',
     required: false,

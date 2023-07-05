@@ -1,7 +1,16 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+} from 'typeorm';
 import { StringToNumericTransformer } from '../transformers/string-to-numeric.transformer';
 import { CustomBaseEntity } from './custom-base.entity';
 import { PurchaseEntity } from './purchase.entity';
+import { TransactionType } from '../enums/transactionType.enum';
+import { CustomerEntity } from './customer.entity';
 
 @Entity({ name: 'SellEntity' })
 export class SellEntity extends CustomBaseEntity {
@@ -35,7 +44,37 @@ export class SellEntity extends CustomBaseEntity {
   })
   sellDate: Date | null;
 
+  @Column({
+    type: 'enum',
+    enum: TransactionType,
+    name: 'transactionType',
+    default: `${TransactionType.Cash}`,
+  })
+  transactionType: TransactionType;
+
+  @OneToOne(() => CustomerEntity, (customerEntity) => customerEntity.sell)
+  @JoinColumn({ name: 'customer_id' })
+  customer: CustomerEntity;
+
   @ManyToOne(() => PurchaseEntity, (purchaseEntity) => purchaseEntity.sells)
   @JoinColumn({ name: 'purchase_id' })
   purchase: PurchaseEntity;
 }
+
+/*
+
+************ Daily Statement ********************* 
+  customername
+  productname
+  amount/quantity
+  price - total sell price (debt/cash)
+
+  Same goes for purchase(daily statement excel sheet download)
+-----------------------------------------------------------------------------------------------
+
+************wheat type ****************
+Russian, Indian, Australian, Ukrain, Brazil, Deshi
+
+*****************Stock**********************
+
+*/

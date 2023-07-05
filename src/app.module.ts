@@ -14,7 +14,7 @@ import { SellModule } from './sell/sell.module';
 import { ManufactureModule } from './manufacture/manufacture.module';
 import { CustomerModule } from './customer/customer.module';
 import { LedgerModule } from './ledger/ledger.module';
-import { BuyerModule } from './buyer/buyer.module';
+import { SellerModule } from './seller/seller.module';
 
 const ENV = process.env['NODE_ENV'];
 const envFilePath = [`env/${!ENV ? `.env` : `.env.${ENV}`}`];
@@ -48,7 +48,7 @@ const envFilePath = [`env/${!ENV ? `.env` : `.env.${ENV}`}`];
     ManufactureModule,
     CustomerModule,
     LedgerModule,
-    BuyerModule,
+    SellerModule,
   ],
   providers: [
     {
